@@ -50,4 +50,114 @@ datos_categoricos <- as.factor(c("bajo", "medio", "alto"))
 
 ################################################################################################################################################################################################################################################################################################################################
 
+#Asignación de Variables
+#En R, se utilizan variables para almacenar información o datos que luego pueden manipularse y analizarse.
+
+# Asignar un valor a una variable
+poblacion_venados <- 150  # Asigna el número 150 a la variable "poblacion_venados"
+
+#El operador <- se usa comúnmente para asignar valores, aunque también se puede usar =.
+
+#2. Vectores
+#Los vectores son estructuras de datos que contienen una secuencia de elementos del mismo tipo (numéricos, de texto, etc.). Para crear un vector se utiliza la función c().
+
+# Crear un vector numérico con los tamaños de diferentes poblaciones
+poblaciones <- c(150, 200, 170, 180)
+
+# Crear un vector de texto con los nombres de especies
+especies <- c("Venado Cola Blanca", "Jaguar", "Tapir")
+
+#Data Frames
+#Un data frame es una estructura que permite almacenar datos en formato de tabla. Los data frames son útiles para organizar los datos de muestreos, observaciones de especies, entre otros.
+
+# Crear un data frame con las especies y sus poblaciones
+datos_especies <- data.frame(
+  especie = c("Venado", "Jaguar", "Tapir"),
+  poblacion = c(150, 25, 50)
+)
+
+##########################################################################################
+#Lectura de Datos desde Archivos
+#Es común tener datos en archivos CSV. Puedes cargar esos datos directamente en R con la función read.csv().
+
+# Leer datos desde un archivo CSV
+datos_muestreo <- read.csv("ruta/datos_muestreo.csv")
+
+##########################################################################################
+
+#Funciones Básicas de Resumen
+#R tiene funciones incorporadas para realizar resúmenes básicos de datos, como promedios, máximos, mínimos, y más.
+
+# Calcular el promedio de la población
+promedio_poblacion <- mean(poblaciones)
+
+# Encontrar el número mínimo y máximo de una población
+min_poblacion <- min(poblaciones)
+max_poblacion <- max(poblaciones)
+min_poblacion
+max_poblacion
+
+#Filtrar Datos
+#Para analizar subconjuntos de datos, puedes filtrar filas según ciertos criterios.
+
+# Filtrar las especies con poblaciones mayores a 100
+especies_mayores_100 <- datos_especies[datos_especies$poblacion > 100, ]
+especies_mayores_100
+
+#Visualización de Datos
+#Puedes usar la biblioteca ggplot2 para crear gráficos que ayuden a visualizar los datos de forma clara y eficiente.
+
+# Instalar y cargar la librería ggplot2
+install.packages("ggplot2")
+library(ggplot2)
+
+# Crear un gráfico de barras con las poblaciones de especies
+ggplot(datos_especies, aes(x = especie, y = poblacion)) +
+  geom_bar(stat = "identity") +
+  theme_minimal()
+
+#Análisis Estadístico
+#Si quieres realizar análisis estadísticos, como pruebas t o regresiones lineales, R tiene funciones integradas para ello.
+
+# Realizar una prueba t para comparar poblaciones
+t.test(poblacion ~ especie, data = datos_especies)
+
+#######################################
+# Filtrar dos especies
+datos_filtrados <- subset(datos_especies, especie %in% c("Tapir", "Venado"))
+
+table(datos_filtrados$especie)
+
+datos_filtrados <- subset(datos_filtrados, !is.na(poblacion))
+
+unique(datos_especies$especie)
+summary(datos_filtrados)
+#######################################
+
+# Ajustar un modelo de regresión lineal
+modelo <- lm(poblacion ~ especie, data = datos_especies)
+summary(modelo)
+
+#Manipulación de Datos con dplyr
+#La biblioteca dplyr facilita la manipulación de grandes conjuntos de datos.
+
+# Instalar y cargar la librería dplyr
+install.packages("dplyr")
+library(dplyr)
+
+# Seleccionar columnas específicas
+especies_seleccionadas <- datos_especies %>% select(especie, poblacion)
+
+# Filtrar datos
+especies_filtradas <- datos_especies %>% filter(poblacion > 100)
+especies_filtradas
+
+#Exportación de Resultados
+#Después de realizar análisis o crear gráficos, puedes guardar los resultados o exportarlos.
+# Guardar un gráfico como archivo PNG
+ggsave("grafico_poblaciones.png")
+
+# Exportar un data frame a un archivo CSV
+write.csv(datos_especies, "resultados_especies.csv")
+
 
